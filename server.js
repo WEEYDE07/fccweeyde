@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const mongoose = require('mongoose');
 const cors = require('cors');
 const app = express();
 
@@ -22,3 +23,21 @@ app.get('/api/hello', function(req, res) {
 app.listen(port, function() {
   console.log(`Listening on port ${port}`);
 });
+
+let uri = 'mongodb+srv://mon-project-wee:' + process.env.PW + '@monprojectwee.brqps.mongodb.net/monprojectWee?retryWrites=true&w=majority';
+mongoose.connect(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+
+let urlSchema = new mongoose.Schema({
+  original : {type: String, required: true},
+  short: Number
+})
+
+let Url = mongoose.model('Url', urlSchema);
+
+let bodyParser = require('body-parser');
+let responseObject = {};
+app.post('/api/shorturl', bodyParser.urlencoded({ extended: false }), (request, response) => {
+  
+  
+  response.json(responseObject);
+})
